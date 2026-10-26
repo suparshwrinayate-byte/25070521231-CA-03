@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Asynchronous JavaScript | Group 61</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#080b14;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+/* Animated Background */
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:linear-gradient(45deg,#7c3aed,#06b6d4);
+    filter:blur(180px);
+    opacity:.25;
+    top:-150px;
+    left:-150px;
+    z-index:-1;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background:#ec4899;
+    filter:blur(180px);
+    opacity:.15;
+    bottom:-150px;
+    right:-100px;
+    z-index:-1;
+}
+
+/* Navbar */
+nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 8%;
+    background:rgba(8,11,20,.85);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#8b5cf6;
+}
+
+.logo span{
+    color:#22d3ee;
+}
+
+nav a{
+    color:#ddd;
+    text-decoration:none;
+    margin-left:25px;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#22d3ee;
+}
+
+/* Hero */
+.hero{
+    min-height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:50px 20px;
+}
+
+.badge{
+    padding:9px 18px;
+    border:1px solid #7c3aed;
+    border-radius:30px;
+    color:#c4b5fd;
+    margin-bottom:25px;
+    background:rgba(124,58,237,.12);
+}
+
+.hero h1{
+    font-size:clamp(45px,8vw,90px);
+    line-height:1;
+    background:linear-gradient(90deg,#8b5cf6,#22d3ee,#ec4899);
+    -webkit-background-clip:text;
+    color:transparent;
+    margin-bottom:25px;
+}
+
+.hero p{
+    max-width:700px;
+    color:#aeb5c5;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:30px;
+    padding:14px 28px;
+    background:linear-gradient(90deg,#7c3aed,#0891b2);
+    color:white;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* Sections */
+section{
+    padding:80px 8%;
+}
+
+.section-title{
+    text-align:center;
+    font-size:40px;
+    margin-bottom:50px;
+}
+
+.section-title span{
+    color:#22d3ee;
+}
+
+/* Cards */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:25px;
+}
+
+.card{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;
+    padding:30px;
+    transition:.4s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    border-color:#8b5cf6;
+    box-shadow:0 15px 40px rgba(124,58,237,.2);
+}
+
+.number{
+    font-size:40px;
+    font-weight:bold;
+    color:#8b5cf6;
+}
+
+.card h3{
+    font-size:25px;
+    margin:15px 0;
+}
+
+.card p{
+    color:#aeb5c5;
+    line-height:1.7;
+}
+
+/* Code */
+.code-box{
+    background:#05070d;
+    border:1px solid #242938;
+    border-radius:15px;
+    overflow:hidden;
+    margin-top:25px;
+}
+
+.code-head{
+    background:#111522;
+    padding:12px 18px;
+    color:#94a3b8;
+}
+
+pre{
+    padding:22px;
+    overflow-x:auto;
+    color:#d8dee9;
+    line-height:1.6;
+}
+
+.keyword{
+    color:#c084fc;
+}
+
+.function{
+    color:#22d3ee;
+}
+
+.string{
+    color:#86efac;
+}
+
+/* Demo */
+.demo{
+    margin-top:25px;
+    padding:25px;
+    border-radius:18px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.demo button{
+    border:none;
+    padding:12px 20px;
+    border-radius:25px;
+    margin-top:15px;
+    cursor:pointer;
+    background:#7c3aed;
+    color:white;
+    font-weight:bold;
+}
+
+.demo button:hover{
+    background:#22d3ee;
+    color:#05070d;
+}
+
+.output{
+    margin-top:20px;
+    padding:15px;
+    min-height:45px;
+    border-radius:10px;
+    background:#05070d;
+    color:#86efac;
+    font-family:monospace;
+}
+
+/* Flow */
+.flow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.flow-box{
+    padding:22px 30px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#18122b,#0d2530);
+    border:1px solid #7c3aed;
+    text-align:center;
+}
+
+.arrow{
+    font-size:28px;
+    color:#22d3ee;
+}
+
+/* Comparison */
+.compare{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:15px;
+}
+
+.compare th,
+.compare td{
+    padding:18px;
+    border:1px solid #292d3b;
+    text-align:left;
+}
+
+.compare th{
+    background:#171a28;
+    color:#22d3ee;
+}
+
+.compare td{
+    background:rgba(255,255,255,.03);
+    color:#cbd5e1;
+}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:40px;
+    border-top:1px solid rgba(255,255,255,.08);
+    color:#94a3b8;
+}
+
+footer strong{
+    color:#8b5cf6;
+}
+
+/* Responsive */
+@media(max-width:800px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    nav{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    nav a{
+        margin:0 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">GROUP <span>61</span></div>
+
+    <div>
+        <a href="#home">Home</a>
+        <a href="#topics">Topics</a>
+        <a href="#demos">Demos</a>
+        <a href="#compare">Compare</a>
+    </div>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+    <div class="badge">⚡ HACK-O-WEEK • GROUP 61</div>
+
+    <h1>Asynchronous<br>JavaScript</h1>
+
+    <p>
+        Understand how JavaScript handles tasks without blocking the main
+        program using <b>Callbacks, Promises and Async/Await.</b>
+    </p>
+
+    <a href="#topics" class="btn">Explore Topics ↓</a>
+
+</section>
+
+
+<!-- TOPICS -->
+<section id="topics">
+
+    <h2 class="section-title">
+        Core <span>Concepts</span>
+    </h2>
+
+    <div class="cards">
+
+        <!-- CALLBACK -->
+        <div class="card">
+
+            <div class="number">01</div>
+
+            <h3>Callbacks</h3>
+
+            <p>
+                A callback is a function passed to another function and
+                executed later when a task is completed.
+            </p>
+
+            <div class="code-box">
+
+                <div class="code-head">callback.js</div>
+
+<pre><span class="keyword">function</span> <span class="function">task</span>(callback) {
+
+    setTimeout(() => {
+
+        console.log(<span class="string">"Task completed"</span>);
+
+        callback();
+
+    }, 1000);
+}
+
+<span class="function">task</span>(() => {
+
+    console.log(<span class="string">"Callback executed"</span>);
+
+});</pre>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROMISE -->
+        <div class="card">
+
+            <div class="number">02</div>
+
+            <h3>Promises</h3>
+
+            <p>
+                A Promise represents the eventual completion or failure
+                of an asynchronous operation.
+            </p>
+
+            <div class="code-box">
+
+                <div class="code-head">promise.js</div>
+
+<pre><span class="keyword">let</span> promise =
+<span class="keyword">new</span> Promise((resolve,reject) => {
+
+    setTimeout(() => {
+
+        resolve(<span class="string">"Data received"</span>);
+
+    },1000);
+
+});
+
+promise.then((result) => {
+
+    console.log(result);
+
+}).catch((error) => {
+
+    console.log(error);
+
+});</pre>
+
+            </div>
+
+        </div>
+
+
+        <!-- ASYNC AWAIT -->
+        <div class="card">
+
+            <div class="number">03</div>
+
+            <h3>Async / Await</h3>
+
+            <p>
+                Async/Await provides a cleaner and easier way to work
+                with Promises.
+            </p>
+
+            <div class="code-box">
+
+                <div class="code-head">async.js</div>
+
+<pre><span class="keyword">async function</span> <span class="function">getData</span>() {
+
+    <span class="keyword">let</span> result =
+        <span class="keyword">await</span> fetch(url);
+
+    <span class="keyword">let</span> data =
+        <span class="keyword">await</span> result.json();
+
+    console.log(data);
+}
+
+<span class="function">getData</span>();</pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FLOW -->
+<section>
+
+    <h2 class="section-title">
+        How It <span>Works</span>
+    </h2>
+
+    <div class="flow">
+
+        <div class="flow-box">
+            <b>Asynchronous Task</b>
+            <br>
+            <small>Time-consuming operation</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            <b>Callback</b>
+            <br>
+            <small>Function later execute</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            <b>Promise</b>
+            <br>
+            <small>Future result</small>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="flow-box">
+            <b>Async/Await</b>
+            <br>
+            <small>Cleaner syntax</small>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- LIVE DEMOS -->
+<section id="demos">
+
+    <h2 class="section-title">
+        Live <span>Demos</span>
+    </h2>
+
+
+    <!-- CALLBACK DEMO -->
+    <div class="demo">
+
+        <h3>🔄 Callback Demo</h3>
+
+        <p>
+            Click the button and see how the callback executes after
+            the asynchronous task.
+        </p>
+
+        <button onclick="callbackDemo()">
+            Run Callback
+        </button>
+
+        <div class="output" id="callbackOutput">
+            Waiting...
+        </div>
+
+    </div>
+
+
+    <!-- PROMISE DEMO -->
+    <div class="demo">
+
+        <h3>🔮 Promise Demo</h3>
+
+        <p>
+            The Promise starts in Pending state and becomes Fulfilled
+            after 2 seconds.
+        </p>
+
+        <button onclick="promiseDemo()">
+            Run Promise
+        </button>
+
+        <div class="output" id="promiseOutput">
+            Promise: Pending...
+        </div>
+
+    </div>
+
+
+    <!-- ASYNC AWAIT DEMO -->
+    <div class="demo">
+
+        <h3>⚡ Async/Await Demo</h3>
+
+        <p>
+            Async/Await waits for the Promise result in a cleaner way.
+        </p>
+
+        <button onclick="asyncDemo()">
+            Run Async/Await
+        </button>
+
+        <div class="output" id="asyncOutput">
+            Ready...
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- COMPARISON -->
+<section id="compare">
+
+    <h2 class="section-title">
+        Quick <span>Comparison</span>
+    </h2>
+
+    <table class="compare">
+
+        <tr>
+            <th>Feature</th>
+            <th>Callback</th>
+            <th>Promise</th>
+            <th>Async/Await</th>
+        </tr>
+
+        <tr>
+            <td>Basic Idea</td>
+            <td>Function executed later</td>
+            <td>Future result</td>
+            <td>Promise handling syntax</td>
+        </tr>
+
+        <tr>
+            <td>Readability</td>
+            <td>Medium</td>
+            <td>Good</td>
+            <td>Excellent</td>
+        </tr>
+
+        <tr>
+            <td>Error Handling</td>
+            <td>Can become difficult</td>
+            <td>.catch()</td>
+            <td>try/catch</td>
+        </tr>
+
+        <tr>
+            <td>Modern JS</td>
+            <td>Yes</td>
+            <td>Yes</td>
+            <td>Yes</td>
+        </tr>
+
+    </table>
+
+</section>
+
+
+<!-- VIVA -->
+<section>
+
+    <h2 class="section-title">
+        🎓 <span>Viva Ready</span>
+    </h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>What is Callback?</h3>
+            <p>
+                A callback is a function passed as an argument to another
+                function and executed after a task is completed.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>What is Promise?</h3>
+            <p>
+                A Promise is an object representing the future result of
+                an asynchronous operation.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>What is Async/Await?</h3>
+            <p>
+                Async/Await is modern JavaScript syntax used to handle
+                Promises in a simple and readable way.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <p>
+        Designed & Developed by <strong>GROUP 61</strong>
+    </p>
+
+    <p>
+        Asynchronous JavaScript • Callbacks • Promises • Async/Await
+    </p>
+
+</footer>
+
+
+<script>
+
+/* CALLBACK */
+function callbackDemo(){
+
+    const output =
+        document.getElementById("callbackOutput");
+
+    output.innerHTML =
+        "⏳ Task started...";
+
+    setTimeout(() => {
+
+        output.innerHTML =
+            "✅ Task completed → Callback executed!";
+
+    },1500);
+}
+
+
+/* PROMISE */
+function promiseDemo(){
+
+    const output =
+        document.getElementById("promiseOutput");
+
+    output.innerHTML =
+        "🟡 Promise: Pending...";
+
+    const promise = new Promise((resolve) => {
+
+        setTimeout(() => {
+
+            resolve("🎉 Promise Fulfilled!");
+
+        },2000);
+
+    });
+
+    promise.then((result) => {
+
+        output.innerHTML = result;
+
+    });
+
+}
+
+
+/* ASYNC / AWAIT */
+async function asyncDemo(){
+
+    const output =
+        document.getElementById("asyncOutput");
+
+    output.innerHTML =
+        "⏳ Waiting for Promise...";
+
+    const result = await new Promise((resolve) => {
+
+        setTimeout(() => {
+
+            resolve("⚡ Async/Await completed successfully!");
+
+        },2000);
+
+    });
+
+    output.innerHTML = result;
+}
+
+</script>
+
+</body>
+</html>

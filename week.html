@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GROUP62 | JavaScript Lab</title>
+
+    <style>
+        :root {
+            --background: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #687386;
+            --primary: #5b45e6;
+            --secondary: #ebe8ff;
+            --success: #159957;
+            --danger: #e44d61;
+            --border: #dfe4ec;
+            --shadow: 0 8px 25px rgba(23, 32, 51, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: auto;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            min-height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .brand span {
+            color: var(--text);
+        }
+
+        .navigation {
+            display: flex;
+            gap: 25px;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .navigation a:hover {
+            color: var(--primary);
+        }
+
+        #time {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            padding: 70px 0;
+        }
+
+        .hero-box {
+            display: grid;
+            grid-template-columns: 1.5fr 0.8fr;
+            gap: 25px;
+        }
+
+        .hero-content,
+        .member-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-content {
+            padding: 55px;
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.7rem, 7vw, 5.5rem);
+            line-height: 0.95;
+            letter-spacing: -4px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero-description {
+            color: var(--muted);
+            max-width: 650px;
+            margin-bottom: 30px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .primary-button {
+            background: var(--primary);
+            color: white;
+        }
+
+        .secondary-button {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .member-card {
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .group-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            background: var(--primary);
+            color: white;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .member-card h2 {
+            margin-top: 25px;
+            font-size: 1.6rem;
+        }
+
+        .member-card p {
+            color: var(--muted);
+        }
+
+        .module {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* =========================
+           GENERAL SECTIONS
+        ========================= */
+
+        section:not(.hero) {
+            padding: 65px 0;
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            letter-spacing: -1px;
+        }
+
+        .section-title p {
+            color: var(--muted);
+            max-width: 650px;
+        }
+
+        /* =========================
+           API BOX
+        ========================= */
+
+        .quote-box {
+            margin-top: 25px;
+            padding: 30px;
+            background: #171b2b;
+            color: white;
+            border-radius: 18px;
+        }
+
+        .quote-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .api-label {
+            color: #aeb7cc;
+            font-size: 0.8rem;
+        }
+
+        .api-state {
+            font-size: 0.8rem;
+            color: #7ee2a8;
+        }
+
+        .quote-text {
+            font-size: clamp(1.4rem, 3vw, 2.3rem);
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .quote-author {
+            color: #aeb7cc;
+            margin-top: 18px;
+        }
+
+        .quote-button {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* =========================
+           TASK CONTROLS
+        ========================= */
+
+        .controls {
+            margin: 25px 0;
+            display: flex;
+            gap: 12px;
+        }
+
+        .controls input,
+        .controls select {
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 9px;
+            padding: 13px 15px;
+            outline: none;
+        }
+
+        .controls input {
+            flex: 1;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            border-color: var(--primary);
+        }
+
+        /* =========================
+           TASK CARDS
+        ========================= */
+
+        .task-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .task-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 22px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            transition: 0.2s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .category {
+            align-self: flex-start;
+            padding: 4px 9px;
+            border-radius: 20px;
+            background: var(--secondary);
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 900;
+        }
+
+        .task-card h3 {
+            margin: 18px 0 8px;
+        }
+
+        .task-card p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .task-bottom {
+            margin-top: auto;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-status {
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        .complete {
+            border: none;
+            background: transparent;
+            color: var(--primary);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .completed {
+            opacity: 0.55;
+        }
+
+        .completed h3 {
+            text-decoration: line-through;
+        }
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .stat-card span {
+            color: var(--muted);
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* =========================
+           STORAGE MESSAGE
+        ========================= */
+
+        .storage-box {
+            margin-top: 20px;
+            background: white;
+            border: 1px dashed #aab2c0;
+            border-radius: 12px;
+            padding: 18px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .storage-box p {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        #storage-status {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 30px 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .hero-box {
+                grid-template-columns: 1fr;
+            }
+
+            .task-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .statistics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 0;
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+                gap: 12px 18px;
+            }
+
+            #time {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 35px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .task-container,
+            .statistics {
+                grid-template-columns: 1fr;
+            }
+
+            .storage-box,
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <header>
+
+        <nav class="navbar container">
+
+            <a href="#home" class="brand">
+                GROUP<span>62</span>
+            </a>
+
+            <div class="navigation">
+                <a href="#brief">API Lab</a>
+                <a href="#tasks">Tasks</a>
+                <a href="#progress">Progress</a>
+            </div>
+
+            <div id="time">
+                00:00:00
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <!-- =========================
+             HERO
+        ========================== -->
+
+        <section class="hero" id="home">
+
+            <div class="container hero-box">
+
+                <div class="hero-content">
+
+                    <p class="eyebrow">
+                        Week 07–08 / JavaScript Lab
+                    </p>
+
+                    <h1>
+                        Learn JavaScript by
+                        <span>building.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Welcome to the GROUP62 browser laboratory.
+                        This interactive page demonstrates asynchronous
+                        JavaScript, DOM manipulation, events, array
+                        methods, browser APIs and local storage.
+                    </p>
+
+                    <div class="actions">
+
+                        <a
+                            href="#brief"
+                            class="button primary-button"
+                        >
+                            Start Experiment ↓
+                        </a>
+
+                        <button
+                            class="button secondary-button"
+                            id="reset-button"
+                        >
+                            Reset Progress
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="member-card">
+
+                    <div>
+
+                        <div class="group-icon">
+                            62
+                        </div>
+
+                        <h2>
+                            GROUP62
+                        </h2>
+
+                        <p>
+                            Student Developer Team
+                        </p>
+
+                    </div>
+
+                    <div class="module">
+
+                        <strong>
+                            CURRENT MODULE
+                        </strong>
+
+                        <p>
+                            Async JavaScript + Browser APIs
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FETCH API
+        ========================== -->
+
+        <section id="brief">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <h2>
+                        Random Quote Generator
+                    </h2>
+
+                    <p>
+                        Click the button to request data from an
+                        external API using fetch(), promises and
+                        async/await.
+                    </p>
+
+                </div>
+
+
+                <div class="quote-box">
+
+                    <div class="quote-header">
+
+                        <span class="api-label">
+                            EXTERNAL API / QUOTE SERVICE
+                        </span>
+
+                        <span
+                            class="api-state"
+                            id="api-state"
+                        >
+                            ● Ready
+                        </span>
+
+                    </div>
+
+
+                    <p
+                        class="quote-text"
+                        id="quote"
+                    >
+                        Press the button to load a quote.
+                    </p>
+
+
+                    <p
+                        class="quote-author"
+                        id="author"
+                    >
+                        — GROUP62 API Lab
+                    </p>
+
+
+                    <button
+                        class="button quote-button"
+                        id="quote-button"
+                    >
+                        Get Random Quote
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             TASK MANAGER
+        ========================== -->
+
+        <section id="tasks">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <h2>
+                        Development Tasks
+                    </h2>
+
+                    <p>
+                        Search and categorize the tasks. Completing
+                        a task changes the DOM and saves the state
+                        inside localStorage.
+                    </p>
+
+                </div>
+
+
+                <div class="controls">
+
+                    <input
+                        type="search"
+                        id="task-search"
+                        placeholder="Search development tasks..."
+                        aria-label="Search development tasks"
+                    >
+
+
+                    <select
+                        id="category-filter"
+                        aria-label="Choose task category"
+                    >
+
+                        <option value="all">
+                            Every Category
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="task-container"
+                    id="task-container"
+                ></div>
+
+
+                <div class="storage-box">
+
+                    <div>
+
+                        <strong>
+                            Browser Storage
+                        </strong>
+
+                        <p>
+                            Completed tasks are remembered after
+                            refreshing the page.
+                        </p>
+
+                    </div>
+
+                    <span id="storage-status">
+                        Nothing saved yet.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROGRESS
+        ========================== -->
+
+        <section id="progress">
+
+            <div class="container">
+
+                <div class="section-title">
+
+                    <h2>
+                        Team Progress
+                    </h2>
+
+                    <p>
+                        The following values are calculated directly
+                        from the JavaScript task array.
+                    </p>
+
+                </div>
+
+
+                <div class="statistics">
+
+                    <article class="stat-card">
+
+                        <strong id="total">
+                            0
+                        </strong>
+
+                        <span>
+                            TOTAL TASKS
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <strong id="completed">
+                            0
+                        </strong>
+
+                        <span>
+                            COMPLETED
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <strong id="pending">
+                            0
+                        </strong>
+
+                        <span>
+                            PENDING
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <strong id="percentage">
+                            0%
+                        </strong>
+
+                        <span>
+                            COMPLETION
+                        </span>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div class="container footer-content">
+
+            <span>
+                GROUP62 — JavaScript Browser Lab
+            </span>
+
+            <span>
+                HTML · CSS · JavaScript
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =

@@ -1,0 +1,579 @@
+.quote-text{font-size:clamp(1.3rem,3vw,2.1rem);font-weight:800;line-height:1.15}
+.quote-author{margin-top:15px;color:var(--muted);font-size:.8rem}
+
+/* TOOLBOX */
+.toolbox{
+  display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:18px
+}
+.search{
+  min-height:46px;padding:0 15px;border:1px solid var(--line);
+  border-radius:10px;background:var(--panel);outline:none
+}
+.search:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,87,214,.1)}
+#filter{
+  min-height:46px;padding:0 14px;border:1px solid var(--line);
+  border-radius:10px;background:var(--panel)
+}
+
+/* TASKS */
+.tasks{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px
+}
+.task{
+  min-height:210px;padding:22px;border:1px solid var(--line);
+  border-radius:15px;background:var(--panel);position:relative;
+  transition:.2s
+}
+.task:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.task-tag{
+  display:inline-block;padding:4px 8px;border-radius:5px;
+  font-size:.65rem;font-weight:900;text-transform:uppercase
+}
+.task-tag.web{background:#e5ecff;color:var(--blue)}
+.task-tag.js{background:#fff2bf;color:#755b00}
+.task-tag.dsa{background:#ffe2dc;color:#a72c1c}
+.task h3{margin:18px 0 6px;font-size:1.2rem}
+.task p{color:var(--muted);font-size:.83rem}
+.task-footer{
+  position:absolute;bottom:20px;left:22px;right:22px;
+  display:flex;justify-content:space-between;align-items:center
+}
+.task-footer button{
+  border:0;background:transparent;color:var(--blue);font-weight:900
+}
+.done{opacity:.55}
+.done h3{text-decoration:line-through}
+
+/* STATS */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px
+}
+.stat{
+  padding:25px;border:1px solid var(--line);border-radius:15px;
+  background:var(--panel)
+}
+.stat:nth-child(1){border-top:4px solid var(--red)}
+.stat:nth-child(2){border-top:4px solid var(--blue)}
+.stat:nth-child(3){border-top:4px solid var(--green)}
+.stat:nth-child(4){border-top:4px solid var(--yellow)}
+.stat strong{display:block;font-size:2.5rem;letter-spacing:-2px}
+.stat span{color:var(--muted);font-size:.75rem;font-weight:800}
+
+/* STORAGE */
+.storage{
+  margin-top:15px;padding:20px;border:1px dashed #aaa;
+  border-radius:14px;background:rgba(255,255,255,.35);
+  display:flex;justify-content:space-between;align-items:center;gap:15px
+}
+.storage p{font-size:.8rem;color:var(--muted)}
+#saved-message{font-weight:800;color:var(--green)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:.75rem}
+.footer-inner{display:flex;justify-content:space-between;gap:15px}
+
+/* RESPONSIVE */
+@media(max-width:850px){
+  .hero-grid{grid-template-columns:1fr}
+  .identity{min-height:230px}
+  .tasks{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .nav{align-items:flex-start;flex-direction:column;padding:15px 0}
+  .nav-links{flex-wrap:wrap;gap:10px 15px}
+  .clock{display:none}
+  .hero-main{padding:32px}
+  .hero h1{letter-spacing:-4px}
+  .section-head{align-items:flex-start;flex-direction:column}
+  .toolbox{grid-template-columns:1fr}
+  .tasks,.stats{grid-template-columns:1fr}
+  .storage,.footer-inner{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<nav class="nav container" aria-label="Main navigation">
+  <a class="logo" href="#home">SHREYANSH<span>/</span>LAB</a>
+  <div class="nav-links">
+    <a href="#brief">Brief</a>
+    <a href="#tasks">Tasks</a>
+    <a href="#stats">Stats</a>
+  </div>
+  <div class="clock" id="clock">00:00:00</div>
+</nav>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section id="home" class="hero">
+<div class="container hero-grid">
+
+  <div class="hero-main">
+    <p class="label">Week 07 / 08 — Browser Lab</p>
+    <h1>Make the page <span>do something.</span></h1>
+    <p class="hero-copy">
+      This is my Week 7–8 JavaScript workspace. Instead of another
+      portfolio, this page acts like a small student command center:
+      it fetches live data, reacts to events, remembers progress and
+      updates the interface without reloading.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#brief">Run the demo ↓</a>
+      <button class="btn btn-light" id="clear-storage">Reset saved data</button>
+    </div>
+  </div>
+
+  <aside class="identity">
+    <div>
+      <div class="initial">S</div>
+      <h2>Shreyansh Shirbhate</h2>
+      <p>3rd Semester · Student Developer</p>
+    </div>
+    <div class="identity-bottom">
+      <strong>MODULE:</strong> Async JS + Browser APIs
+    </div>
+  </aside>
+
+</div>
+</section>
+
+<!-- ASYNC FETCH -->
+<section id="brief">
+<div class="container">
+
+  <div class="section-head">
+    <div>
+      <p class="section-kicker">01 / ASYNC FETCH</p>
+      <h2 class="section-title">Today’s brief.</h2>
+    </div>
+    <p class="section-desc">
+      A live quote is requested with <code>fetch()</code>.
+      The UI shows loading, success and error states using
+      async/await and try/catch.
+    </p>
+  </div>
+
+  <div class="api-panel">
+    <div class="api-top">
+      <span class="api-status" id="api-status">
+        <span class="status-dot"></span>Ready to fetch
+      </span>
+      <button class="btn btn-red" id="refresh-quote">Fetch new quote ↻</button>
+    </div>
+
+    <div class="quote">
+      <p class="quote-text" id="quote-text">
+        Click “Fetch new quote” to load a live response.
+      </p>
+      <p class="quote-author" id="quote-author">— API response</p>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- DOM + EVENTS -->
+<section id="tasks">
+<div class="container">
+
+  <div class="section-head">
+    <div>
+      <p class="section-kicker">02 / DOM + EVENTS</p>
+      <h2 class="section-title">My build queue.</h2>
+    </div>
+    <p class="section-desc">
+      Search and filter the task data. Click “complete” to trigger
+      a DOM event and update the card instantly.
+    </p>
+  </div>
+
+  <div class="toolbox">
+    <input class="search" id="search" type="search"
+           placeholder="Search tasks..." aria-label="Search tasks">
+    <select id="filter" aria-label="Filter tasks">
+      <option value="all">All categories</option>
+    </select>
+  </div>
+
+  <div id="task-list" class="tasks"></div>
+
+  <div class="storage">
+    <div>
+      <strong>localStorage</strong>
+      <p>Your completed tasks are saved in this browser.</p>
+    </div>
+    <span id="saved-message">No changes yet.</span>
+  </div>
+
+</div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+<div class="container">
+
+  <div class="section-head">
+    <div>
+      <p class="section-kicker">03 / ARRAY METHODS</p>
+      <h2 class="section-title">Progress, calculated.</h2>
+    </div>
+    <p class="section-desc">
+      These numbers are generated from the task array using
+      filter(), some(), every() and reduce().
+    </p>
+  </div>
+
+  <div class="stats">
+    <article class="stat">
+      <strong id="total-stat">0</strong>
+      <span>TOTAL TASKS</span>
+    </article>
+
+    <article class="stat">
+      <strong id="done-stat">0</strong>
+      <span>COMPLETED</span>
+    </article>
+
+    <article class="stat">
+      <strong id="open-stat">0</strong>
+      <span>REMAINING</span>
+    </article>
+
+    <article class="stat">
+      <strong id="rate-stat">0%</strong>
+      <span>COMPLETION RATE</span>
+    </article>
+  </div>
+
+</div>
+</section>
+
+</main>
+
+<footer>
+<div class="container footer-inner">
+  <span>SHREYANSH/LAB — HACK-O-WEEK 2026</span>
+  <span>Built with HTML · CSS · JavaScript</span>
+</div>
+</footer>
+
+<script>
+/* =========================================================
+   WEEK 7–8: ASYNC JS + BROWSER APIs
+   ========================================================= */
+
+/* DATA */
+const tasks = [
+  {
+    id: 1,
+    title: "Responsive landing page",
+    description: "Build a mobile-first landing page with semantic HTML and CSS Grid.",
+    category: "Web",
+    completed: false
+  },
+  {
+    id: 2,
+    title: "Weather API experiment",
+    description: "Use fetch() and async/await to request and display external data.",
+    category: "JavaScript",
+    completed: false
+  },
+  {
+    id: 3,
+    title: "LeetCode practice",
+    description: "Solve two tree or dynamic programming problems and review the approach.",
+    category: "DSA",
+    completed: true
+  },
+  {
+    id: 4,
+    title: "DOM event playground",
+    description: "Create buttons and inputs that modify the page without reloading.",
+    category: "JavaScript",
+    completed: false
+  },
+  {
+    id: 5,
+    title: "Local progress tracker",
+    description: "Save completed tasks to localStorage and restore them on refresh.",
+    category: "JavaScript",
+    completed: false
+  },
+  {
+    id: 6,
+    title: "Accessibility pass",
+    description: "Check labels, focus states, headings and keyboard navigation.",
+    category: "Web",
+    completed: false
+  }
+];
+
+/* localStorage */
+const STORAGE_KEY = "shreyansh_week78_tasks";
+
+function loadSavedTasks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    const savedState = JSON.parse(saved);
+
+    tasks.forEach(task => {
+      if (savedState[task.id] !== undefined) {
+        task.completed = savedState[task.id];
+      }
+    });
+  } catch (error) {
+    console.error("Could not load saved data:", error);
+  }
+}
+
+function saveTasks() {
+  const state = {};
+
+  tasks.forEach(task => {
+    state[task.id] = task.completed;
+  });
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+  document.querySelector("#saved-message").textContent =
+    "Progress saved ✓";
+}
+
+/* DOM + map() */
+const createTaskCard = task => `
+  <article class="task ${task.completed ? "done" : ""}">
+    <span class="task-tag ${task.category === "JavaScript" ? "js" :
+                            task.category === "DSA" ? "dsa" : "web"}">
+      ${task.category}
+    </span>
+
+    <h3>${task.title}</h3>
+    <p>${task.description}</p>
+
+    <div class="task-footer">
+      <span>${task.completed ? "Completed ✓" : "In progress"}</span>
+
+      <button
+        type="button"
+        class="complete-btn"
+        data-id="${task.id}">
+        ${task.completed ? "Undo" : "Complete →"}
+      </button>
+    </div>
+  </article>
+`;
+
+function renderTasks(list) {
+  document.querySelector("#task-list").innerHTML =
+    list.map(createTaskCard).join("");
+
+  document.querySelectorAll(".complete-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const id = Number(button.dataset.id);
+
+      const task = tasks.find(item => item.id === id);
+
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks();
+        applyFilters();
+        updateStats();
+      }
+    });
+  });
+}
+
+/* filter() */
+function applyFilters() {
+  const searchTerm =
+    document.querySelector("#search").value.toLowerCase();
+
+  const selectedCategory =
+    document.querySelector("#filter").value;
+
+  const filtered = tasks.filter(task => {
+
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchTerm) ||
+      task.description.toLowerCase().includes(searchTerm);
+
+    const matchesCategory =
+      selectedCategory === "all" ||
+      task.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  renderTasks(filtered);
+}
+
+/* Populate categories using map + Set + spread */
+const categories = [
+  ...new Set(tasks.map(({ category }) => category))
+];
+
+document.querySelector("#filter").innerHTML +=
+  categories
+    .map(category =>
+      `<option value="${category}">${category}</option>`
+    )
+    .join("");
+
+document.querySelector("#search")
+  .addEventListener("input", applyFilters);
+
+document.querySelector("#filter")
+  .addEventListener("change", applyFilters);
+
+/* reduce() */
+function updateStats() {
+
+  const total = tasks.reduce(
+    count => count + 1,
+    0
+  );
+
+  const completed = tasks.reduce(
+    (count, task) =>
+      count + (task.completed ? 1 : 0),
+    0
+  );
+
+  /* filter() */
+  const remaining =
+    tasks.filter(task => !task.completed).length;
+
+  const rate =
+    total === 0
+      ? 0
+      : Math.round((completed / total) * 100);
+
+  document.querySelector("#total-stat").textContent = total;
+  document.querySelector("#done-stat").textContent = completed;
+  document.querySelector("#open-stat").textContent = remaining;
+  document.querySelector("#rate-stat").textContent = `${rate}%`;
+
+  /* some() */
+  const hasCompleted =
+    tasks.some(task => task.completed);
+
+  /* every() */
+  const dataIsValid =
+    tasks.every(task =>
+      Boolean(task.title && task.description && task.category)
+    );
+
+  console.log(
+    `Has completed task: ${hasCompleted}`
+  );
+
+  console.log(
+    `All task data valid: ${dataIsValid}`
+  );
+}
+
+/* Async JS: Promise + async/await + fetch */
+async function fetchQuote() {
+
+  const status = document.querySelector("#api-status");
+  const quoteText = document.querySelector("#quote-text");
+  const quoteAuthor = document.querySelector("#quote-author");
+
+  status.innerHTML =
+    '<span class="status-dot" style="background:#f0c84b"></span>Loading...';
+
+  quoteText.textContent = "Waiting for API response...";
+  quoteAuthor.textContent = "— fetching";
+
+  try {
+
+    const response =
+      await fetch("https://dummyjson.com/quotes/random");
+
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+
+    const data = await response.json();
+
+    quoteText.textContent =
+      `"${data.quote}"`;
+
+    quoteAuthor.textContent =
+      `— ${data.author}`;
+
+    status.innerHTML =
+      '<span class="status-dot"></span>Live response received';
+
+  } catch (error) {
+
+    quoteText.textContent =
+      "The API could not be reached. Try again.";
+
+    quoteAuthor.textContent =
+      "— network error";
+
+    status.innerHTML =
+      '<span class="status-dot" style="background:#e74732"></span>Error';
+
+    console.error(error);
+  }
+}
+
+/* Event */
+document.querySelector("#refresh-quote")
+  .addEventListener("click", fetchQuote);
+
+/* localStorage reset */
+document.querySelector("#clear-storage")
+  .addEventListener("click", () => {
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    tasks.forEach(task => {
+      task.completed = false;
+    });
+
+    document.querySelector("#saved-message").textContent =
+      "Saved progress cleared.";
+
+    applyFilters();
+    updateStats();
+  });
+
+/* Browser API: Date + DOM */
+function updateClock() {
+  const now = new Date();
+
+  document.querySelector("#clock").textContent =
+    now.toLocaleTimeString();
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+/* Initialise */
+loadSavedTasks();
+applyFilters();
+updateStats();
+
+/* Callback demonstration */
+function runAfterDelay(callback) {
+  setTimeout(callback, 500);
+}
+
+runAfterDelay(() => {
+  console.log("Callback executed after 500ms.");
+});
+</script>
+
+</body>
+</html>

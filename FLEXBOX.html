@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flexbox and Grid</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        /* FLEXBOX */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1e293b;
+            padding: 20px 50px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .menu a:hover {
+            color: #38bdf8;
+        }
+
+        /* GRID */
+        .container {
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        .heading {
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #2563eb;
+        }
+
+        .card p {
+            color: #64748b;
+        }
+
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- FLEXBOX NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">MyWebsite</div>
+
+        <div class="menu">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+
+    <!-- GRID SECTION -->
+    <div class="container">
+
+        <h1 class="heading">Our Services</h1>
+
+        <div class="grid">
+
+            <div class="card">
+                <h2>Web Design</h2>
+                <p>Beautiful and responsive websites.</p>
+                <button class="btn">Learn More</button>
+            </div>
+
+            <div class="card">
+                <h2>Development</h2>
+                <p>Modern websites using HTML, CSS and JS.</p>
+                <button class="btn">Learn More</button>
+            </div>
+
+            <div class="card">
+                <h2>Marketing</h2>
+                <p>Grow your business with digital marketing.</p>
+                <button class="btn">Learn More</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
