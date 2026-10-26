@@ -1,0 +1,5 @@
+map()     → names/marks change
+filter()  → 70+ students
+reduce()  → total marks
+find()    → particular student
+some()    → 90+ hai ya nahi
